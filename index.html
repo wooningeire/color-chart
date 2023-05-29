@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Color Chart</title>
+		<meta charset="UTF-8" />
+		<style type="text/css">
+
+body {
+	margin: 0;
+}
+
+		</style>
+
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<script type="text/javascript">
+
+var canvas = document.querySelector("#canvas");
+var ctx = canvas.getContext("2d");
+
+ctx.canvas.width = innerWidth;
+ctx.canvas.height = innerHeight;
+
+var scale = Number(getVarFromUrl("scale"));
+if (!scale) {
+	scale = 16;
+}
+
+var width = Math.floor(ctx.canvas.width / scale) * scale;
+var height = Math.floor(ctx.canvas.height / scale) * scale;
+
+dispColors();
+
+function dispColors() {
+	var hue = 0;
+	var sat = 1;
+	var lig = 0;
+
+	var hueMax = 360;
+	var satMax = 1;
+	var ligMax = 1;
+	
+	var xStep = width / scale;
+	var yStep = height / scale;
+	for (var y = 1; y <= height; y = y + scale) {
+		hue = 0;
+		lig += ligMax / yStep;
+			
+		console.log(lig);
+		for (var x = 1; x <= width; x = x + scale) {
+			hue += hueMax / xStep;
+			
+			ctx.fillStyle = "hsl(" + hue + ", " + pcStr(sat) + ", " + pcStr(lig) + ")";
+			ctx.fillRect(x, y, scale, scale);
+		}
+	}
+}
+
+function pcStr(n) {
+	return n * 100 + "%";
+}
+
+function getVarFromUrl(variable) {
+	var vars = location.search.substring(1).split("&");
+
+	for (var i = 0; i < vars.length; i++) {
+		var declaration = vars[i].split("=");
+		if (declaration[0] == variable) {
+			return declaration[1];
+		}
+	}
+	return false;
+}
+
+		</script>
+	</body>
+</html>
